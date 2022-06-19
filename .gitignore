@@ -1,0 +1,8 @@
+# venv directories and files
+/Include
+/Lib
+/Scripts
+pyvenv.cfg
+
+# ipykernel directories
+/share
