@@ -6,3 +6,9 @@ pyvenv.cfg
 
 # ipykernel directories
 /share
+
+# python cache
+__pycache__
+
+# geckodriver log file
+geckodriver.log
