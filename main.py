@@ -9,7 +9,10 @@ def endpoint_isvalid(subdir):
     url = f"https://sports.sportingbet.com{subdir}"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"}
     
-    return requests.get(url, headers=headers).ok
+    response = requests.get(url, headers=headers)
+    print(response.status_code)
+
+    return response.ok
 
 def retrieve_html(subdir):
 
@@ -20,6 +23,7 @@ def retrieve_html(subdir):
     options.headless = True
     
     driver = webdriver.Firefox(options=options)
+    driver = webdriver.Firefox()
     driver.get(f"https://sports.sportingbet.com{subdir}")
 
     return driver.page_source
@@ -31,7 +35,10 @@ def create_json(events):
     for event in events:
     
         event_ = {}
-        event_["name"] = event.find(class_="title").text
+        try:
+            event_["name"] = event.find(class_="title").text
+        except:
+            pass
         matches = []
         
         event = event.find_all("ms-event")
@@ -59,7 +66,7 @@ def return_content(subdir):
 
     if not html:
         return {"error": "Subdirectory not found"}
-
+    print(html)
     soup = BeautifulSoup(html, "html.parser")
     root = soup.find(id="main-view")
     events = root.find_all("ms-event-group")
@@ -67,4 +74,3 @@ def return_content(subdir):
     event_list = create_json(events)
 
     return {"response": event_list}
-    #return json.dumps({"response": event_list}, ensure_ascii=False)
